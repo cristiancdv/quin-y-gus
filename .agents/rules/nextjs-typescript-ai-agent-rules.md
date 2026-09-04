@@ -91,6 +91,8 @@ Always inspect the installed Next.js version before applying version-specific ru
 
 Use APIs, conventions, caching behavior, and generated types supported by the installed version instead of blindly copying examples from another major version.
 
+In Next.js 16, the App Router is the primary model and the rendered boundary is component-level rather than route-level. A page can contain a static shell and dynamic sections together, and caching/revalidation can be applied to the data or component that needs it instead of forcing an all-or-nothing route choice.
+
 For Next.js versions that use asynchronous request APIs, handle dynamic APIs according to the installed version's contract, including APIs such as:
 
 - `cookies()`
@@ -231,9 +233,11 @@ Before caching data, determine whether it is:
 - periodically stale
 - safe to share across requests
 
+The official App Router model in Next.js treats static and dynamic rendering as a spectrum at the component level rather than a binary route-level decision. Use this model deliberately: keep the initial shell static when possible, and make only the dynamic sections server-rendered or revalidated as needed.
+
 Google Sheets reads should not automatically hit the provider on every request when the data can safely be stale or revalidated.
 
-For content that is shared, non-sensitive, and allowed to be stale, prefer the installed Next.js version's supported caching/revalidation mechanisms rather than implementing an ad-hoc in-memory cache.
+For content that is shared, non-sensitive, and allowed to be stale, prefer the installed Next.js version's supported caching/revalidation mechanisms rather than implementing an ad-hoc in-memory cache. In modern Next.js this usually means choosing among `fetch` caching, route segment config, tags, and the `use cache` pattern when the project uses Cache Components.
 
 Use time-based revalidation or cache invalidation/tags when appropriate to the installed Next.js version and project configuration.
 
@@ -241,7 +245,7 @@ Do not cache user-specific or authorization-sensitive data in a shared scope unl
 
 Do not add `force-cache`, `no-store`, revalidation settings, cache tags, `use cache`, or dynamic rendering configuration merely to silence a symptom. First understand the data freshness and authorization requirements.
 
-After a Google Sheets mutation, revalidate or invalidate only the affected data when freshness is required.
+After a Google Sheets mutation, revalidate or invalidate only the affected data when freshness is required. Prefer targeted invalidation (`revalidateTag`/`revalidatePath`) over broad route-level cache resets when only a section is affected.
 
 Do not make the initial mobile render wait on a live external read when a safe server-side cached or statically available representation can satisfy the product requirement.
 
