@@ -14,10 +14,11 @@ This file records what **this repo confirms** and what the practice document ass
 
 ## Installed dependencies
 
-- Google APIs (`googleapis`), shadcn/ui, Lucide React, and `react-countdown`
+- Google APIs (`googleapis`), Embla Carousel, Radix UI, Lucide React,
+  `react-countdown`, `server-only`, Sonner, and Zod
 - Every dependency update must be recorded in this file.
 
-Not installed: authentication, a validation library, a test runner, and a global state library.
+Not installed: authentication, a test runner, and a global state library.
 
 ## Environment variables
 
