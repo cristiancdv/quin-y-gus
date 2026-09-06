@@ -7,13 +7,13 @@
 export const googleSheetsConfig = {
   spreadsheetId: process.env.GOOGLE_SHEETS_SPREADSHEET_ID,
   tabs: {
-    rsvps: "RSVPs",
+    rsvps: "Hoja 1",
     photoWall: "MuroDeFotos",
   },
   ranges: {
     // Columns: Fecha | Nombre | Asiste | Acompañantes | Restricciones | Mensaje
-    rsvps: "RSVPs!A:F",
-    // Columns: Fecha | Archivo
-    photoWall: "MuroDeFotos!A:B",
+    rsvps: "Hoja 1!A:F",
+    // Columns: Fecha | Archivo | URL de Google Photos
+    photoWall: "MuroDeFotos!A:C",
   },
 } as const;

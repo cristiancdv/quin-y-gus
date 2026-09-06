@@ -5,8 +5,19 @@ import type { RsvpInput } from "@/lib/validations/rsvp-schema";
 
 export type AppendRsvpResult = { ok: true } | { ok: false; error: string };
 
+function getGoogleErrorDetails(error: unknown): { code?: number; message: string } {
+  if (error instanceof Error) {
+    const code =
+      "code" in error && typeof error.code === "number" ? error.code : undefined;
+
+    return { code, message: error.message };
+  }
+
+  return { message: "Error desconocido" };
+}
+
 /**
- * Appends one validated RSVP response as a row in the "RSVPs" tab.
+ * Appends one validated RSVP response as a row in the configured attendance tab.
  *
  * This is the adapter boundary described in the project's Google Sheets
  * rules: callers pass already-validated application data, and this module
@@ -56,7 +67,9 @@ export async function appendRsvpRow(data: RsvpInput): Promise<AppendRsvpResult> 
     });
     return { ok: true };
   } catch (error) {
-    console.error("[google-sheets] Error al escribir el RSVP:", error);
+    // Do not log the library error object: it includes the entire submitted
+    // request body, which contains guest data.
+    console.error("[google-sheets] Error al escribir el RSVP:", getGoogleErrorDetails(error));
     return {
       ok: false,
       error: "No pudimos guardar tu confirmación. Probá de nuevo en un momento.",

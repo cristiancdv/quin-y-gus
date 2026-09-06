@@ -2,13 +2,7 @@
 
 import { rsvpSchema } from "@/lib/validations/rsvp-schema";
 import { appendRsvpRow } from "@/lib/google-sheets/rsvp-adapter";
-
-export type RsvpActionState =
-  | { status: "idle" }
-  | { status: "success"; attending: boolean }
-  | { status: "error"; message: string; fieldErrors?: Record<string, string[]> };
-
-export const initialRsvpActionState: RsvpActionState = { status: "idle" };
+import type { RsvpActionState } from "@/types/form-actions";
 
 /**
  * Server Action backing the RSVP form. Treated as a public attack surface:

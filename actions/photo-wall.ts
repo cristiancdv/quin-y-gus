@@ -2,13 +2,8 @@
 
 import { photoWallSchema } from "@/lib/validations/photo-wall-schema";
 import { appendPhotoWallRow } from "@/lib/google-sheets/photo-wall-adapter";
-
-export type PhotoWallActionState =
-  | { status: "idle" }
-  | { status: "success" }
-  | { status: "error"; message: string; fieldErrors?: Record<string, string[]> };
-
-export const initialPhotoWallActionState: PhotoWallActionState = { status: "idle" };
+import { uploadPhotoToGooglePhotos } from "@/lib/google-photos/client";
+import type { PhotoWallActionState } from "@/types/form-actions";
 
 /**
  * Server Action backing the guest photo-upload form. Re-validates the file
@@ -33,12 +28,22 @@ export async function submitPhotoWallEntry(
     };
   }
 
-  const outcome = await appendPhotoWallRow({
+  const uploadOutcome = await uploadPhotoToGooglePhotos(result.data.photo);
+
+  if (!uploadOutcome.ok) {
+    return { status: "error", message: uploadOutcome.error };
+  }
+
+  // The Google Photos upload is the guest-facing operation. Keep the Sheets
+  // row as best-effort operational metadata so a missing optional tab does
+  // not incorrectly tell the guest their photo was lost.
+  const sheetOutcome = await appendPhotoWallRow({
     fileName: result.data.photo.name,
+    googlePhotosUrl: uploadOutcome.productUrl,
   });
 
-  if (!outcome.ok) {
-    return { status: "error", message: outcome.error };
+  if (!sheetOutcome.ok) {
+    console.error("[google-sheets] No se pudo registrar la foto en Sheets.");
   }
 
   return { status: "success" };
