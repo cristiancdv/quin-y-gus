@@ -1,7 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display, Alex_Brush } from "next/font/google";
+import { QRCodeSVG } from "qrcode.react";
 import { Toaster } from "@/components/ui/sonner";
 import { weddingContent } from "@/data/wedding";
+import { accessibilityContent } from "@/data/sections";
 import "./globals.css";
 
 // Body copy: clean grotesque sans, matches the reference's UI text.
@@ -28,6 +30,7 @@ const alexBrush = Alex_Brush({
 });
 
 const { first, second } = weddingContent.coupleNames;
+const { notFoundCards } = weddingContent;
 
 export const metadata: Metadata = {
   title: `${first} & ${second} — ${weddingContent.weddingDateLabel}`,
@@ -47,8 +50,27 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${inter.variable} ${playfairDisplay.variable} ${alexBrush.variable} antialiased`}
     >
       <body className="bg-background text-foreground min-h-screen">
-        {children}
-        <Toaster position="top-center" richColors />
+        <div className="mobile-app">
+          {children}
+          <Toaster position="top-center" richColors />
+        </div>
+        <main className="desktop-message" aria-label={accessibilityContent.desktopAvailability}>
+          <article className="desktop-message-card">
+            <i className={notFoundCards.icon} />
+            <h1>{notFoundCards.title}</h1>
+            <p>{notFoundCards.paragraph}<span className="font-bold">{notFoundCards.paragraphSpan}</span></p>
+            {notFoundCards.qrUrl ? (
+              <QRCodeSVG
+                value={notFoundCards.qrUrl}
+                size={160}
+                marginSize={2}
+                bgColor="#ffffff"
+                fgColor="#241f1a"
+                aria-label={accessibilityContent.eventQr}
+              />
+            ) : null}
+          </article>
+        </main>
       </body>
     </html>
   );

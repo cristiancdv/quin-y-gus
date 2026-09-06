@@ -3,8 +3,6 @@ import { getSheetsClient, isGoogleSheetsConfigured } from "./client";
 import { googleSheetsConfig } from "./config";
 
 export interface PhotoWallEntry {
-  guestName: string;
-  caption?: string;
   fileName: string;
 }
 
@@ -48,7 +46,7 @@ export async function appendPhotoWallRow(entry: PhotoWallEntry): Promise<AppendP
       range: googleSheetsConfig.ranges.photoWall,
       valueInputOption: "USER_ENTERED",
       requestBody: {
-        values: [[new Date().toISOString(), entry.guestName, entry.caption ?? "", entry.fileName]],
+        values: [[new Date().toISOString(), entry.fileName]],
       },
     });
     return { ok: true };

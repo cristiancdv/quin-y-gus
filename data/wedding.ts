@@ -29,6 +29,13 @@ export const weddingContent: WeddingContent = {
   weddingDateLabel: "10 · Abril · 2027",
   ceremonyTime: "17:00 hrs",
   receptionTime: "19:00 hrs",
+  notFoundCards: {
+    icon: "fa-solid fa-circle-exclamation",
+    title: "¡Alguien se perdió de camino al altar! ",
+    paragraph: 'No te preocupes, esto no es un "No, acepto".\n\n',
+    paragraphSpan: " te invitamos a abrir el enlace en tu celular para disfrutar de la experiencia completa.\n\n ¡Nos vemos en la boda!",
+    qrUrl: process.env.NEXT_PUBLIC_EVENT_QR_URL ?? "",
+  },
   venue: {
     name: "Hacienda Las Encinas",
     addressLine: "Camino Real s/n, Valle de Bravo",
@@ -41,11 +48,12 @@ export const weddingContent: WeddingContent = {
     paletteNote: "Paleta sugerida: crema, terracota, azul marino. ¡Sin blanco!",
   },
   giftRegistry: {
-    intro: "Tu presencia es nuestro mayor regalo. Si deseas contribuir:",
-    links: [
-      { id: "liverpool", label: "Mesa de regalos Liverpool · 912345" },
-      { id: "sobres", label: "Lluvia de sobres" },
-    ],
+    intro:
+      "Tu presencia es muy importante para nosotros y nos alegra que nos acompañes en este momento. Si deseás hacernos un regalo, aquí te dejamos nuestros datos.",
+    banking: {
+      alias: "valentina.sebastian",
+      cvu: "0000003100012345678901",
+    },
   },
   timeline: [
     {

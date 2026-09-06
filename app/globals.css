@@ -106,6 +106,7 @@
     html {
       scroll-behavior: auto;
     }
+
     *,
     *::before,
     *::after {
@@ -118,6 +119,7 @@
 }
 
 @layer utilities {
+
   /* Eyebrow label used above every section heading, e.g. "NUESTRA HISTORIA" */
   .eyebrow {
     @apply text-primary text-xs font-semibold tracking-[0.2em] uppercase;
@@ -126,5 +128,51 @@
   /* Two-tone serif heading: first line foreground, accent line via [data-accent] */
   .section-heading {
     @apply font-display text-3xl leading-tight text-balance sm:text-4xl;
+  }
+}
+
+.desktop-message {
+  display: none;
+}
+
+@media (min-width: 781px) {
+  .mobile-app {
+    display: none;
+  }
+
+  .desktop-message {
+    display: grid;
+    min-height: 100vh;
+    place-items: center;
+    padding: 2rem;
+  }
+
+  .desktop-message-card {
+    display: flex;
+    width: min(100%, 32rem);
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--card);
+    padding: 2.5rem;
+    text-align: center;
+    box-shadow: 0 12px 30px rgb(36 31 26 / 0.1);
+  }
+
+  .desktop-message-card h1 {
+    margin: 0;
+    color: var(--foreground);
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 3vw, 2.5rem);
+  }
+
+  .desktop-message-card p {
+    margin: 0;
+    max-width: 26rem;
+    color: var(--muted-foreground);
+    white-space: pre-line;
+    line-height: 1.6;
   }
 }

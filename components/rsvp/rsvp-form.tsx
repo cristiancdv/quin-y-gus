@@ -9,6 +9,9 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { submitRsvp, initialRsvpActionState } from "@/actions/rsvp";
 import type { RsvpDecision } from "./swipe-card";
+import { rsvpSectionContent } from "@/data/sections";
+
+const rsvpIcons = { heart: Heart, "party-popper": PartyPopper } as const;
 
 function SubmitButton({ attending }: { attending: boolean }) {
   const { pending } = useFormStatus();
@@ -17,12 +20,12 @@ function SubmitButton({ attending }: { attending: boolean }) {
       {pending ? (
         <>
           <Loader2 className="animate-spin" aria-hidden />
-          Enviando...
+          {rsvpSectionContent.sending}
         </>
       ) : attending ? (
-        "Confirmar mi match"
+        rsvpSectionContent.confirm
       ) : (
-        "Enviar respuesta"
+        rsvpSectionContent.send
       )}
     </Button>
   );
@@ -40,6 +43,9 @@ interface RsvpFormProps {
  */
 export function RsvpForm({ decision, onBack }: RsvpFormProps) {
   const attending = decision === "yes";
+  const ResultIcon = attending
+    ? rsvpIcons[rsvpSectionContent.icons.attendingSuccess]
+    : rsvpIcons[rsvpSectionContent.icons.heart];
   const [state, formAction] = useActionState(submitRsvp, initialRsvpActionState);
 
   const fieldErrors = state.status === "error" ? state.fieldErrors : undefined;
@@ -55,19 +61,19 @@ export function RsvpForm({ decision, onBack }: RsvpFormProps) {
     return (
       <div className="mx-auto max-w-sm text-center" role="status">
         <span className="bg-accent text-primary mx-auto flex size-16 items-center justify-center rounded-full">
-          {attending ? <PartyPopper className="size-7" /> : <Heart className="size-7" />}
+          <ResultIcon className="size-7" />
         </span>
         <h3
           id="rsvp-result-heading"
           tabIndex={-1}
           className="font-display mt-5 text-2xl text-foreground outline-none"
         >
-          {attending ? "¡Es un match!" : "Gracias por avisarnos"}
+          {attending ? rsvpSectionContent.attendingSuccess : rsvpSectionContent.decliningSuccess}
         </h3>
         <p className="text-muted-foreground mt-2 text-sm">
           {attending
-            ? "Confirmamos tu asistencia. Nos vemos en la pista de baile."
-            : "Lamentamos que no puedas acompañarnos, ¡gracias por contarnos!"}
+            ? rsvpSectionContent.attendingDescription
+            : rsvpSectionContent.decliningDescription}
         </p>
       </div>
     );
@@ -79,12 +85,12 @@ export function RsvpForm({ decision, onBack }: RsvpFormProps) {
 
       <div className="text-center">
         <p className="text-primary text-sm font-semibold">
-          {attending ? "¡Es un match! Contanos más" : "Antes de irte, contanos quién sos"}
+          {attending ? rsvpSectionContent.attendingPrompt : rsvpSectionContent.decliningPrompt}
         </p>
       </div>
 
       <div className="space-y-1.5">
-        <Label htmlFor="fullName">Nombre completo</Label>
+        <Label htmlFor="fullName">{rsvpSectionContent.fullName}</Label>
         <Input id="fullName" name="fullName" autoComplete="name" required maxLength={80} />
         {fieldErrors?.fullName ? (
           <p className="text-destructive text-xs">{fieldErrors.fullName[0]}</p>
@@ -93,7 +99,7 @@ export function RsvpForm({ decision, onBack }: RsvpFormProps) {
 
       {attending ? (
         <div className="space-y-1.5">
-          <Label htmlFor="guestCount">Cantidad de personas (incluite vos)</Label>
+          <Label htmlFor="guestCount">{rsvpSectionContent.guestCount}</Label>
           <Input
             id="guestCount"
             name="guestCount"
@@ -111,7 +117,7 @@ export function RsvpForm({ decision, onBack }: RsvpFormProps) {
 
       {attending ? (
         <div className="space-y-1.5">
-          <Label htmlFor="dietaryNotes">Restricciones alimenticias (opcional)</Label>
+          <Label htmlFor="dietaryNotes">{rsvpSectionContent.dietaryNotes}</Label>
           <Textarea id="dietaryNotes" name="dietaryNotes" maxLength={300} rows={2} />
           {fieldErrors?.dietaryNotes ? (
             <p className="text-destructive text-xs">{fieldErrors.dietaryNotes[0]}</p>
@@ -120,7 +126,7 @@ export function RsvpForm({ decision, onBack }: RsvpFormProps) {
       ) : null}
 
       <div className="space-y-1.5">
-        <Label htmlFor="message">Mensaje para los novios (opcional)</Label>
+        <Label htmlFor="message">{rsvpSectionContent.message}</Label>
         <Textarea id="message" name="message" maxLength={500} rows={3} />
         {fieldErrors?.message ? (
           <p className="text-destructive text-xs">{fieldErrors.message[0]}</p>
@@ -140,7 +146,7 @@ export function RsvpForm({ decision, onBack }: RsvpFormProps) {
           onClick={onBack}
           className="text-muted-foreground hover:text-foreground w-full text-center text-sm underline-offset-4 hover:underline"
         >
-          Volver
+          {rsvpSectionContent.back}
         </button>
       </div>
     </form>

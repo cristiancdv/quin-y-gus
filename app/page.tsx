@@ -7,6 +7,7 @@ import { GallerySection } from "@/components/sections/gallery-section";
 import { PhotoWallSection } from "@/components/sections/photo-wall-section";
 import { EventDetailsSection } from "@/components/sections/event-details-section";
 import { RsvpSection } from "@/components/sections/rsvp-section";
+import { MusicSection } from "@/components/sections/music-section";
 import { SiteFooter } from "@/components/sections/site-footer";
 
 export default function Home() {
@@ -21,6 +22,7 @@ export default function Home() {
         <PhotoWallSection />
         <EventDetailsSection />
         <RsvpSection />
+        <MusicSection />
       </main>
       <SiteFooter />
       <MusicToggle />

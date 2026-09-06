@@ -13,7 +13,7 @@ export const googleSheetsConfig = {
   ranges: {
     // Columns: Fecha | Nombre | Asiste | Acompañantes | Restricciones | Mensaje
     rsvps: "RSVPs!A:F",
-    // Columns: Fecha | Nombre | Mensaje | Archivo
-    photoWall: "MuroDeFotos!A:D",
+    // Columns: Fecha | Archivo
+    photoWall: "MuroDeFotos!A:B",
   },
 } as const;
