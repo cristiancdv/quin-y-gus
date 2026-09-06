@@ -1,7 +1,9 @@
-# AI Coding Agent Rules — Next.js, React & Strict TypeScript — Google Sheets
+# AI Coding Agent Rules — Quin y Gus: Next.js, React, Strict TypeScript & Google Sheets
 
-**Version:** 3.1  
-**Purpose:** Operating policy for AI coding agents working on a mobile-first Next.js application using TypeScript, Google Sheets as an external data source, and a defined UI stack.
+**Version:** 4.0
+**Purpose:** Operating policy for this mobile-first wedding invitation. It uses
+Next.js 16.3.4, React 19.2.8, strict TypeScript, Tailwind 4, local
+shadcn-style primitives, and Google Sheets for limited write operations.
 
 > This file is an **agent operating policy**, not a generic style guide. Prioritize rules that affect architecture, correctness, security, performance, accessibility, maintainability, and verification. Do not waste agent context enforcing formatting that can be handled deterministically by the repository's tooling.
 
@@ -23,6 +25,10 @@ When rules conflict, apply this order of authority:
 Never change an existing project convention solely to make code conform to this document.
 
 Never assume a library, runtime, package manager, authentication provider, validation library, styling system, or deployment platform unless the repository confirms it or the user explicitly requires it.
+
+Read `.agents/config.md` for the repository-specific inventory and known
+limitations. It records facts, not replacements for the source code or local
+version-matched documentation.
 
 ---
 
@@ -92,6 +98,11 @@ Always inspect the installed Next.js version before applying version-specific ru
 Use APIs, conventions, caching behavior, and generated types supported by the installed version instead of blindly copying examples from another major version.
 
 In Next.js 16, the App Router is the primary model and the rendered boundary is component-level rather than route-level. A page can contain a static shell and dynamic sections together, and caching/revalidation can be applied to the data or component that needs it instead of forcing an all-or-nothing route choice.
+
+This project does **not** enable `cacheComponents` in `next.config.ts`. Do not
+apply Cache Components guidance, `use cache`, `cacheLife`, or cache tags as a
+default. First enable and design that model deliberately, or follow the
+version-matched previous caching model documented by Next.js.
 
 For Next.js versions that use asynchronous request APIs, handle dynamic APIs according to the installed version's contract, including APIs such as:
 
@@ -338,15 +349,20 @@ Do not use global client state for data that can remain server-owned or URL-owne
 
 The application uses this UI stack:
 
-- **shadcn/ui** for reusable UI primitives and components, including buttons and carousels
+- repository-local **shadcn-style primitives** for reusable UI components
 - **Lucide React** for interface icons, including timeline icons
 - **react-countdown** for countdown/timer behavior
+- Embla through the local carousel primitive, Framer Motion for established
+  animation/gesture work, Sonner for notifications, and `qrcode.react` for the
+  desktop QR code
 
 Prefer these libraries over creating equivalent bespoke implementations.
 
 Do not add another icon library, button library, carousel library, or countdown library when the required behavior can be achieved with the existing stack.
 
-Use shadcn/ui components consistently with the repository's current configuration and composition patterns. Extend or compose existing components before creating a parallel design-system implementation.
+Use the repository's local shadcn-style components consistently with
+`components.json` and the current composition patterns. Extend or compose
+existing components before creating a parallel design-system implementation.
 
 Use Lucide React for application UI icons instead of Unicode symbols, emoji, hand-drawn inline SVG duplicates, or another icon package unless a product requirement explicitly requires a different asset.
 
@@ -534,6 +550,12 @@ For security-sensitive changes, cover unauthorized and invalid-input cases expli
 
 For Google Sheets parsing/mapping, cover missing cells, malformed values, and representative sheet-shape variations where those conditions are possible.
 
+This repository has no configured test runner. Do not invent test commands or
+test infrastructure for routine changes; use the available lint/build checks
+and state the manual verification that remains necessary. Add a test runner
+only when the request explicitly calls for it or the risk clearly justifies a
+project-level tooling decision.
+
 When fixing a bug, add or update a regression test when practical.
 
 ---
@@ -638,9 +660,13 @@ Do not replace framework-native behavior with third-party libraries unless the t
 
 Required UI dependencies for this application are already established:
 
-- shadcn/ui
+- local shadcn-style primitives
 - Lucide React
 - react-countdown
+- Embla Carousel
+- Framer Motion
+- Sonner
+- qrcode.react
 
 Prefer them for their stated responsibilities.
 

@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { submitRsvp, initialRsvpActionState } from "@/actions/rsvp";
+import { submitRsvp } from "@/actions/rsvp";
 import type { RsvpDecision } from "./swipe-card";
 import { rsvpSectionContent } from "@/data/sections";
+import { initialRsvpActionState } from "@/types/form-actions";
 
 const rsvpIcons = { heart: Heart, "party-popper": PartyPopper } as const;
 

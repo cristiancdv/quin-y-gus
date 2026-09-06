@@ -5,8 +5,9 @@ import { toast } from "sonner";
 import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { submitPhotoWallEntry, initialPhotoWallActionState } from "@/actions/photo-wall";
+import { submitPhotoWallEntry } from "@/actions/photo-wall";
 import { photoWallSectionContent } from "@/data/sections";
+import { initialPhotoWallActionState } from "@/types/form-actions";
 
 /**
  * Client Component: needs local form state (useActionState) and to reset

@@ -4,6 +4,7 @@ import { googleSheetsConfig } from "./config";
 
 export interface PhotoWallEntry {
   fileName: string;
+  googlePhotosUrl?: string;
 }
 
 export type AppendPhotoWallResult = { ok: true } | { ok: false; error: string };
@@ -11,14 +12,8 @@ export type AppendPhotoWallResult = { ok: true } | { ok: false; error: string };
 /**
  * Records a guest photo-wall submission in the "MuroDeFotos" tab.
  *
- * IMPORTANT — storage is not wired up yet: Google Sheets cannot hold binary
- * data, so this adapter only logs the *metadata* (name, caption, original
- * file name). The actual photo file is validated in the Server Action but
- * is not uploaded anywhere in this base project.
- *
- * Before launch, connect a real file store (Google Drive via this same
- * service account, S3, Cloudinary, etc.), upload the file there first, and
- * pass the resulting URL into this adapter's row instead of `fileName`.
+ * Google Sheets stores operational metadata only; binary photo storage is
+ * handled by the Google Photos adapter before this function is called.
  */
 export async function appendPhotoWallRow(entry: PhotoWallEntry): Promise<AppendPhotoWallResult> {
   if (!isGoogleSheetsConfigured()) {
@@ -46,7 +41,7 @@ export async function appendPhotoWallRow(entry: PhotoWallEntry): Promise<AppendP
       range: googleSheetsConfig.ranges.photoWall,
       valueInputOption: "USER_ENTERED",
       requestBody: {
-        values: [[new Date().toISOString(), entry.fileName]],
+        values: [[new Date().toISOString(), entry.fileName, entry.googlePhotosUrl ?? ""]],
       },
     });
     return { ok: true };
