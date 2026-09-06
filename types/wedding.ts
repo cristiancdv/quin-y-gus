@@ -22,15 +22,29 @@ export interface GalleryPhoto {
   caption: string;
 }
 
+export interface VerticalCarouselItem {
+  id: string;
+  src: string;
+  alt: string;
+}
+
 export interface CoupleProfile {
   name: string;
   photoSrc: string;
   photoAlt: string;
 }
 
-export interface GiftRegistryLink {
-  id: string;
-  label: string;
+export interface BankingDetails {
+  alias: string;
+  cvu: string;
+}
+
+export interface EventCardContent {
+  icon?: string;
+  title: string;
+  paragraph: string;
+  paragraphSpan?: string;
+  qrUrl: string;
 }
 
 export interface WeddingContent {
@@ -46,6 +60,7 @@ export interface WeddingContent {
   weddingDateLabel: string; // human readable, e.g. "10 · Abril · 2027"
   ceremonyTime: string;
   receptionTime: string;
+  notFoundCards: EventCardContent;
   venue: {
     name: string;
     addressLine: string;
@@ -59,7 +74,7 @@ export interface WeddingContent {
   };
   giftRegistry: {
     intro: string;
-    links: GiftRegistryLink[];
+    banking: BankingDetails;
   };
   timeline: TimelineMilestone[];
   gallery: GalleryPhoto[];

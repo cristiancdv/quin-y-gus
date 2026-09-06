@@ -3,7 +3,7 @@
 import { useRef, type RefObject } from "react";
 import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-import type { VerticalCarouselItem } from "@/constants/vertical-match";
+import type { VerticalCarouselItem } from "@/types/wedding";
 
 interface VerticalCarrouselProps {
     items: VerticalCarouselItem[];

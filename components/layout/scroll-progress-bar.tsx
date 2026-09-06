@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { scrollProgressContent } from "@/data/sections";
 
 /**
  * Thin fixed bar at the top of the viewport that fills as the visitor
@@ -41,7 +42,7 @@ export function ScrollProgressBar() {
     <div
       className="bg-border/60 fixed top-0 right-0 left-0 z-50 h-1"
       role="progressbar"
-      aria-label="Progreso de lectura de la invitación"
+      aria-label={scrollProgressContent.ariaLabel}
       aria-valuenow={Math.round(progress)}
       aria-valuemin={0}
       aria-valuemax={100}

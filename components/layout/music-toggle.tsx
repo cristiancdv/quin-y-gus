@@ -3,6 +3,9 @@
 import { useRef, useState } from "react";
 import { Volume2, VolumeX } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { musicToggleContent } from "@/data/sections";
+
+const musicToggleIcons = { "volume-2": Volume2, "volume-x": VolumeX } as const;
 
 /**
  * Floating bottom-right button that toggles background music, matching the
@@ -16,6 +19,9 @@ import { cn } from "@/lib/utils";
 export function MusicToggle() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const VolumeIcon = isPlaying
+    ? musicToggleIcons[musicToggleContent.playIcon]
+    : musicToggleIcons[musicToggleContent.pauseIcon];
 
   function toggle() {
     const audio = audioRef.current;
@@ -38,12 +44,12 @@ export function MusicToggle() {
 
   return (
     <>
-      <audio ref={audioRef} src="/audio/song.mp3" loop preload="none" />
+      <audio ref={audioRef} src={musicToggleContent.audioSrc} loop preload="none" />
       <button
         type="button"
         onClick={toggle}
         aria-pressed={isPlaying}
-        aria-label={isPlaying ? "Pausar música de fondo" : "Reproducir música de fondo"}
+        aria-label={isPlaying ? musicToggleContent.pauseLabel : musicToggleContent.playLabel}
         className={cn(
           "fixed right-5 bottom-5 z-40 flex size-12 items-center justify-center rounded-full",
           "bg-card text-foreground border-border border shadow-lg shadow-black/10",
@@ -51,7 +57,7 @@ export function MusicToggle() {
           "focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
         )}
       >
-        {isPlaying ? <Volume2 className="size-5" /> : <VolumeX className="size-5" />}
+        <VolumeIcon className="size-5" />
       </button>
     </>
   );

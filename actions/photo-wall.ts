@@ -20,8 +20,6 @@ export async function submitPhotoWallEntry(
   formData: FormData
 ): Promise<PhotoWallActionState> {
   const raw = {
-    guestName: formData.get("guestName"),
-    caption: formData.get("caption") || undefined,
     photo: formData.get("photo"),
   };
 
@@ -36,8 +34,6 @@ export async function submitPhotoWallEntry(
   }
 
   const outcome = await appendPhotoWallRow({
-    guestName: result.data.guestName,
-    caption: result.data.caption,
     fileName: result.data.photo.name,
   });
 

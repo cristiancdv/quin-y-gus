@@ -2,16 +2,17 @@
 
 import Countdown, { type CountdownRenderProps, zeroPad } from "react-countdown";
 import { useSyncExternalStore } from "react";
+import { countdownSectionContent } from "@/data/sections";
 
 interface WeddingCountdownProps {
   targetDate: string;
 }
 
 const UNITS: Array<{ key: keyof Pick<CountdownRenderProps, "days" | "hours" | "minutes" | "seconds">; label: string }> = [
-  { key: "days", label: "Días" },
-  { key: "hours", label: "Horas" },
-  { key: "minutes", label: "Min" },
-  { key: "seconds", label: "Seg" },
+  { key: "days", label: countdownSectionContent.units.days },
+  { key: "hours", label: countdownSectionContent.units.hours },
+  { key: "minutes", label: countdownSectionContent.units.minutes },
+  { key: "seconds", label: countdownSectionContent.units.seconds },
 ];
 
 const subscribe = () => () => { };
@@ -21,7 +22,7 @@ const getServerSnapshot = () => false;
 function renderer(props: CountdownRenderProps) {
   if (props.completed) {
     return (
-      <p className="text-secondary font-display text-2xl">¡Hoy es el gran día!</p>
+      <p className="text-secondary font-display text-2xl">{countdownSectionContent.completed}</p>
     );
   }
 

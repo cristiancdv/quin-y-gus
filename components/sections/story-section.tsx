@@ -1,5 +1,6 @@
 import { Coffee, Plane, Sparkles, type LucideIcon } from "lucide-react";
 import { weddingContent } from "@/data/wedding";
+import { storySectionContent } from "@/data/sections";
 import { SectionHeading } from "@/components/common/section-heading";
 import type { TimelineIcon } from "@/types/wedding";
 
@@ -13,9 +14,9 @@ export function StorySection() {
   const { timeline } = weddingContent;
 
   return (
-    <section aria-label="Nuestra historia" className="bg-surface-alt px-6 py-20">
+    <section aria-label={storySectionContent.ariaLabel} className="bg-surface-alt px-6 py-20">
       <div className="mx-auto max-w-lg">
-        <SectionHeading eyebrow="Nuestra historia" line1="El algoritmo del" line2="amor verdadero" />
+        <SectionHeading eyebrow={storySectionContent.eyebrow} line1={storySectionContent.titleLine1} line2={storySectionContent.titleLine2} />
 
         <ol className="mt-14 space-y-10">
           {timeline.map((milestone, index) => {

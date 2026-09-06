@@ -11,6 +11,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import type { GalleryPhoto } from "@/types/wedding";
+import { gallerySectionContent } from "@/data/sections";
 
 function GalleryControls({ total }: { total: number }) {
   const { scrollPrev, scrollNext, canScrollPrev, canScrollNext } = useCarousel();
@@ -21,7 +22,7 @@ function GalleryControls({ total }: { total: number }) {
         type="button"
         onClick={scrollPrev}
         disabled={!canScrollPrev}
-        aria-label="Foto anterior"
+        aria-label={gallerySectionContent.previous}
         className="border-border bg-card text-foreground hover:bg-muted flex size-11 items-center justify-center rounded-full border shadow-sm transition-colors disabled:opacity-40"
       >
         <ChevronLeft className="size-5" />
@@ -30,12 +31,12 @@ function GalleryControls({ total }: { total: number }) {
         type="button"
         onClick={scrollNext}
         disabled={!canScrollNext}
-        aria-label="Siguiente foto"
+        aria-label={gallerySectionContent.next}
         className="border-border bg-card text-foreground hover:bg-muted flex size-11 items-center justify-center rounded-full border shadow-sm transition-colors disabled:opacity-40"
       >
         <ChevronRight className="size-5" />
       </button>
-      <span className="sr-only">{total} fotos en la galería</span>
+      <span className="sr-only">{total} {gallerySectionContent.totalPhotos}</span>
     </div>
   );
 }
@@ -89,7 +90,7 @@ export function GalleryCarousel({ photos }: GalleryCarouselProps) {
       </CarouselContent>
       <GalleryControls total={photos.length} />
       <span className="sr-only" aria-live="polite">
-        Mostrando foto {current + 1} de {photos.length}
+        {gallerySectionContent.liveLabel} {current + 1} de {photos.length}
       </span>
     </Carousel>
   );

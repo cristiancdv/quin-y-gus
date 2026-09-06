@@ -9,7 +9,8 @@ import {
   rightProfileImages,
   VERTICAL_CAROUSEL_REVEAL_RANGE,
   VERTICAL_CAROUSEL_REVEAL_START,
-} from "@/constants/vertical-match";
+} from "@/data/vertical-match";
+import { heroSectionContent } from "@/data/sections";
 import { VerticalCarrousel } from "@/components/vertical-match/vertical-carrousel";
 
 
@@ -38,7 +39,7 @@ export function HeroSection() {
   return (
     <section
       ref={heroRef}
-      aria-label="Portada"
+      aria-label={heroSectionContent.ariaLabel}
       className="bg-background relative px-6 pb-20 "
     >
 
@@ -48,9 +49,9 @@ export function HeroSection() {
           transition={{ duration: 0.12, ease: "linear" }}
           className="pointer-events-none fixed top-16 left-1/2 z-10 flex w-full -translate-x-1/2 flex-col items-center gap-2 text-center"
         >
-          <p className="eyebrow text-[10px] sm:text-xs">El Match Definitivo</p>
+          <p className="eyebrow text-[10px] sm:text-xs">{heroSectionContent.eyebrow}</p>
           <p className="text-muted-foreground mx-auto mt-2 max-w-xs text-xs/5 tracking-[0.16em] sm:text-sm">
-            Desliza para unir a los novios
+            {heroSectionContent.instruction}
           </p>
           <motion.div
             animate={{ y: [0, 8, 0] }}
@@ -95,7 +96,7 @@ export function HeroSection() {
               className="absolute inset-x-0 bottom-6 mx-auto max-w-lg translate-y-12 text-center"
               aria-live="polite"
             >
-              <p className="eyebrow">99% compatibilidad</p>
+              <p className="eyebrow">{heroSectionContent.compatibility}</p>
 
               <h1 className="mt-4 leading-none">
                 <span className="font-script text-foreground block text-6xl sm:text-7xl">

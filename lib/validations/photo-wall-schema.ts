@@ -9,12 +9,6 @@ const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp", "image/heic"];
  * declared MIME type without checking it here first.
  */
 export const photoWallSchema = z.object({
-  guestName: z
-    .string()
-    .trim()
-    .min(2, "Ingresá tu nombre.")
-    .max(80, "El nombre es demasiado largo."),
-  caption: z.string().trim().max(140, "Máximo 140 caracteres.").optional(),
   photo: z
     .file()
     .max(MAX_PHOTO_BYTES, "La foto no puede pesar más de 8MB.")
