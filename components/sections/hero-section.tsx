@@ -1,61 +1,30 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Heart } from "lucide-react";
-import { useState } from "react";
+import { ArrowDown, Heart } from "lucide-react";
+import { useRef, useState } from "react";
 import { weddingContent } from "@/data/wedding";
+import {
+  leftProfileImages,
+  rightProfileImages,
+  VERTICAL_CAROUSEL_REVEAL_RANGE,
+  VERTICAL_CAROUSEL_REVEAL_START,
+} from "@/constants/vertical-match";
 import { VerticalCarrousel } from "@/components/vertical-match/vertical-carrousel";
 
-const leftProfileImages = [
-  {
-    id: "left-1",
-    src: "/images/profiles/img-carrousel-profile-left-1.webp",
-    alt: "Perfil de la novia",
-    caption: "Novia",
-  },
-  {
-    id: "left-2",
-    src: "/images/profiles/img-carrousel-profile-left-2.webp",
-    alt: "Perfil de la novia",
-    caption: "Novia",
-  },
-  {
-    id: "left-3",
-    src: "/images/profiles/img-carrousel-profile-left-3.webp",
-    alt: "Perfil de la novia",
-    caption: "Novia",
-  },
-];
 
-const rightProfileImages = [
-  {
-    id: "right-1",
-    src: "/images/profiles/img-carrousel-profile-rigth-1.webp",
-    alt: "Perfil del novio",
-    caption: "Novio",
-  },
-  {
-    id: "right-2",
-    src: "/images/profiles/img-carrousel-profile-rigth-2.webp",
-    alt: "Perfil del novio",
-    caption: "Novio",
-  },
-  {
-    id: "right-3",
-    src: "/images/profiles/img-carrousel-profile-rigth-3.webp",
-    alt: "Perfil del novio",
-    caption: "Novio",
-  },
-];
-
-
-/**
- * Server Component — purely presentational, no interactivity needed here.
- */
 export function HeroSection() {
+  const heroRef = useRef<HTMLElement>(null);
   const { coupleNames, weddingDateLabel } = weddingContent;
   const [carouselProgress, setCarouselProgress] = useState([0, 0]);
-  const revealProgress = Math.min(1, Math.max(0, (Math.min(...carouselProgress) - 0.68) / 0.32));
+  const revealProgress = Math.min(
+    1,
+    Math.max(
+      0,
+      (Math.min(...carouselProgress) - VERTICAL_CAROUSEL_REVEAL_START) /
+      VERTICAL_CAROUSEL_REVEAL_RANGE,
+    ),
+  );
 
   const updateCarouselProgress = (column: number) => (progress: number) => {
     setCarouselProgress((current) => {
@@ -68,30 +37,44 @@ export function HeroSection() {
 
   return (
     <section
+      ref={heroRef}
       aria-label="Portada"
-      className="bg-background relative px-6 pt-16 pb-20 sm:pt-24"
+      className="bg-background relative px-6 pb-20 "
     >
-      <div className="mx-auto max-w-lg text-center">
-        <p className="eyebrow text-[10px] sm:text-xs">El Match Definitivo</p>
-        <p className="text-muted-foreground mx-auto mt-2 max-w-xs text-xs/5 tracking-[0.16em] sm:text-sm">
-          Desliza para unir a los novios
-        </p>
 
-      </div>
-
-      <div className="relative mx-auto my-14 w-full max-w-[23rem] sm:max-w-md">
+      <div className="relative mx-auto w-full max-w-[23rem] sm:max-w-md">
+        <motion.div
+          animate={{ opacity: 1 - revealProgress, y: revealProgress * -16 }}
+          transition={{ duration: 0.12, ease: "linear" }}
+          className="pointer-events-none fixed top-16 left-1/2 z-10 flex w-full -translate-x-1/2 flex-col items-center gap-2 text-center"
+        >
+          <p className="eyebrow text-[10px] sm:text-xs">El Match Definitivo</p>
+          <p className="text-muted-foreground mx-auto mt-2 max-w-xs text-xs/5 tracking-[0.16em] sm:text-sm">
+            Desliza para unir a los novios
+          </p>
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+            className="text-secondary mt-3 flex justify-center"
+            aria-hidden
+          >
+            <ArrowDown className="size-6" strokeWidth={1} />
+          </motion.div>
+        </motion.div>
         <div className="grid w-full grid-cols-2 items-start justify-items-center gap-3 sm:gap-4">
           <div className="w-full">
             <VerticalCarrousel
               items={leftProfileImages}
               onProgress={updateCarouselProgress(0)}
+              scrollTarget={heroRef}
             />
           </div>
           <div className="w-full">
             <VerticalCarrousel
               items={rightProfileImages}
-              invertDirection={true}
+              invertDirection
               onProgress={updateCarouselProgress(1)}
+              scrollTarget={heroRef}
             />
           </div>
         </div>
