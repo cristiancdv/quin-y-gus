@@ -1,6 +1,7 @@
 "use client";
 
 import Countdown, { type CountdownRenderProps, zeroPad } from "react-countdown";
+import { useSyncExternalStore } from "react";
 
 interface WeddingCountdownProps {
   targetDate: string;
@@ -12,6 +13,10 @@ const UNITS: Array<{ key: keyof Pick<CountdownRenderProps, "days" | "hours" | "m
   { key: "minutes", label: "Min" },
   { key: "seconds", label: "Seg" },
 ];
+
+const subscribe = () => () => { };
+const getClientSnapshot = () => true;
+const getServerSnapshot = () => false;
 
 function renderer(props: CountdownRenderProps) {
   if (props.completed) {
@@ -48,5 +53,11 @@ function renderer(props: CountdownRenderProps) {
  * which needs browser timers — this can't be a Server Component.
  */
 export function WeddingCountdown({ targetDate }: WeddingCountdownProps) {
-  return <Countdown date={targetDate} renderer={renderer} />;
+  const isMounted = useSyncExternalStore(subscribe, getClientSnapshot, getServerSnapshot);
+
+  return (
+    <div className="min-h-28">
+      {isMounted ? <Countdown date={targetDate} renderer={renderer} /> : null}
+    </div>
+  );
 }

@@ -16,12 +16,12 @@ export const weddingContent: WeddingContent = {
   profiles: {
     first: {
       name: "Valentina",
-      photoSrc: "/images/profile-valentina.svg",
+      photoSrc: "/images/profile-valentina.jpg",
       photoAlt: "Valentina sonriendo en una calle empedrada",
     },
     second: {
       name: "Sebastián",
-      photoSrc: "/images/profile-sebastian.svg",
+      photoSrc: "/images/profile-sebastian.jpg",
       photoAlt: "Sebastián mirando el atardecer desde un balcón",
     },
   },
@@ -76,19 +76,19 @@ export const weddingContent: WeddingContent = {
   gallery: [
     {
       id: "primera-cita",
-      src: "/images/gallery-1.svg",
+      src: "/images/gallery-1.jpg",
       alt: "Valentina y Sebastián bailando en una azotea de noche",
       caption: "La primera cita",
     },
     {
       id: "noches-de-ciudad",
-      src: "/images/gallery-2.svg",
+      src: "/images/gallery-2.jpg",
       alt: "Valentina y Sebastián abrazados en un bar",
       caption: "Noches de ciudad",
     },
     {
       id: "el-si-eterno",
-      src: "/images/gallery-3.svg",
+      src: "/images/gallery-3.jpg",
       alt: "Manos entrelazadas mostrando los anillos",
       caption: "El sí eterno",
     },

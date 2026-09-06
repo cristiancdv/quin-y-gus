@@ -1,19 +1,15 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, type RefObject } from "react";
 import { motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-
-interface FilmItem {
-    id: string;
-    src: string;
-    alt: string;
-}
+import type { VerticalCarouselItem } from "@/constants/vertical-match";
 
 interface VerticalCarrouselProps {
-    items: FilmItem[];
+    items: VerticalCarouselItem[];
     invertDirection?: boolean;
     onProgress?: (progress: number) => void;
+    scrollTarget?: RefObject<HTMLElement | null>;
 }
 
 
@@ -22,12 +18,13 @@ export function VerticalCarrousel({
     items,
     invertDirection = false,
     onProgress,
+    scrollTarget,
 }: VerticalCarrouselProps) {
     const containerRef = useRef<HTMLDivElement>(null);
 
     // Monitorear el scroll dentro de este contenedor específico
     const { scrollYProgress } = useScroll({
-        target: containerRef,
+        target: scrollTarget ?? containerRef,
         offset: ["start start", "end end"],
     });
 

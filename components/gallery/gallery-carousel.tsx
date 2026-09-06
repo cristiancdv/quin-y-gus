@@ -61,7 +61,7 @@ export function GalleryCarousel({ photos }: GalleryCarouselProps) {
   }, [api]);
 
   return (
-    <Carousel setApi={setApi} opts={{ align: "start", loop: false }}>
+    <Carousel setApi={setApi} opts={{ align: "center", loop: false }}>
       <CarouselContent>
         {photos.map((photo, index) => (
           <CarouselItem key={photo.id} className="basis-4/5 sm:basis-3/5">
@@ -70,7 +70,7 @@ export function GalleryCarousel({ photos }: GalleryCarouselProps) {
                 src={photo.src}
                 alt={photo.alt}
                 fill
-                sizes="(min-width: 640px) 360px, 80vw"
+                sizes="(min-width: 640px) 240px, 65vw"
                 className="object-cover"
               />
               <div

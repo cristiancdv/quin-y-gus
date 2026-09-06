@@ -12,7 +12,7 @@ export function GallerySection() {
         </p>
       </div>
 
-      <div className="mx-auto mt-10 max-w-3xl">
+      <div className="mx-auto mt-10 max-w-[32rem]">
         <GalleryCarousel photos={weddingContent.gallery} />
       </div>
     </section>
