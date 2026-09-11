@@ -5,7 +5,7 @@
  * reserved for data crossing a trust boundary (see src/lib/validations).
  */
 
-export type TimelineIcon = "coffee" | "plane" | "sparkles";
+export type TimelineIcon = "coffee" | "plane" | "sparkles"| "scale" | "parasol" | "userGroup";
 
 export interface TimelineMilestone {
   id: string;

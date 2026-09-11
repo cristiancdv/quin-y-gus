@@ -56,3 +56,7 @@ export function MirrorballIcon(props: WeddingIconProps) {
 export function GiftsIcon(props: WeddingIconProps) {
     return <WeddingIcon name="regalos" {...props} size={32} />;
 }
+
+export function GyQIcon(props: WeddingIconProps) {
+    return <WeddingIcon name="brindis2" {...props} size={100} />;
+}

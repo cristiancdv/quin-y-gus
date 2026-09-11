@@ -1,4 +1,4 @@
-import { Coffee, Plane, Sparkles, type LucideIcon } from "lucide-react";
+import { Coffee, Plane, Sparkles, Scale, Parasol, UserGroup, type LucideIcon } from "lucide-react";
 import { weddingContent } from "@/data/wedding";
 import { storySectionContent } from "@/data/sections";
 import { SectionHeading } from "@/components/common/section-heading";
@@ -8,6 +8,9 @@ const ICONS: Record<TimelineIcon, LucideIcon> = {
   coffee: Coffee,
   plane: Plane,
   sparkles: Sparkles,
+  scale: Scale,
+  parasol: Parasol,
+  userGroup: UserGroup,
 };
 
 export function StorySection() {
