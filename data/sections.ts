@@ -135,7 +135,7 @@ export const footerContent = {
 } as const;
 
 export const musicToggleContent = {
-    audioSrc: "/audio/song.mp3",
+    audioSrc: "/audio/love_me_like_you_do.mp3",
     playLabel: "Reproducir música de fondo",
     pauseLabel: "Pausar música de fondo",
     playIcon: "volume-2",

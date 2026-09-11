@@ -5,11 +5,16 @@ export function getSpotifyEmbedUrl(url: string) {
 
     try {
         const parsedUrl = new URL(url);
-        const playlistId = parsedUrl.pathname.split("/").filter(Boolean).pop();
+        const segments = parsedUrl.pathname.split("/").filter(Boolean);
 
-        if (!playlistId) return "";
+        // Buscamos si el link es de una playlist
+        const playlistIndex = segments.indexOf("playlist");
+        if (playlistIndex !== -1 && segments[playlistIndex + 1]) {
+            const playlistId = segments[playlistIndex + 1];
+            return `https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0`;
+        }
 
-        return `https://open.spotify.com/embed/playlist/${playlistId}?utm_source=generator&theme=0`;
+        return "";
     } catch {
         return "";
     }

@@ -7,6 +7,7 @@ interface GooglePhotosCredentials {
   clientId: string;
   clientSecret: string;
   refreshToken: string;
+  albumId?: string;
 }
 
 export type GooglePhotosUploadResult =
@@ -17,19 +18,20 @@ function readCredentials(): GooglePhotosCredentials | null {
   const clientId = process.env.GOOGLE_PHOTOS_CLIENT_ID;
   const clientSecret = process.env.GOOGLE_PHOTOS_CLIENT_SECRET;
   const refreshToken = process.env.GOOGLE_PHOTOS_REFRESH_TOKEN;
+  const albumId = process.env.GOOGLE_PHOTOS_ALBUM_ID;
 
   if (!clientId || !clientSecret || !refreshToken) {
     return null;
   }
 
-  return { clientId, clientSecret, refreshToken };
+  return { clientId, clientSecret, refreshToken, albumId };
 }
 
 function getErrorMessage(response: Response): string {
   return `Google Photos respondió con estado ${response.status}.`;
 }
 
-async function getAccessToken(credentials: GooglePhotosCredentials): Promise<string | null> {
+async function getAccessToken(credentials: GooglePhotosCredentials): Promise<string | null | undefined> {
   const oauthClient = new google.auth.OAuth2(credentials.clientId, credentials.clientSecret);
   oauthClient.setCredentials({ refresh_token: credentials.refreshToken });
 
@@ -60,6 +62,8 @@ export async function uploadPhotoToGooglePhotos(photo: File): Promise<GooglePhot
         error: "No pudimos conectar con la galería de fotos. Probá de nuevo más tarde.",
       };
     }
+    const arrayBuffer = await photo.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
 
     const uploadResponse = await fetch("https://photoslibrary.googleapis.com/v1/uploads", {
       method: "POST",
@@ -69,9 +73,8 @@ export async function uploadPhotoToGooglePhotos(photo: File): Promise<GooglePhot
         "X-Goog-Upload-Content-Type": photo.type,
         "X-Goog-Upload-Protocol": "raw",
       },
-      body: await photo.arrayBuffer(),
+      body: buffer,
     });
-
     if (!uploadResponse.ok) {
       console.error("[google-photos] No se pudieron cargar los bytes:", getErrorMessage(uploadResponse));
       return {
@@ -98,6 +101,7 @@ export async function uploadPhotoToGooglePhotos(photo: File): Promise<GooglePhot
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
+          albumId: credentials.albumId,
           newMediaItems: [
             {
               simpleMediaItem: {
@@ -140,6 +144,7 @@ export async function uploadPhotoToGooglePhotos(photo: File): Promise<GooglePhot
       productUrl: result.mediaItem.productUrl,
     };
   } catch (error) {
+    console.log(error)
     const message = error instanceof Error ? error.message : "Error desconocido";
     console.error("[google-photos] Error de carga:", message);
     return {
