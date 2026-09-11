@@ -6,6 +6,7 @@ import { Upload } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { submitPhotoWallEntry } from "@/actions/photo-wall";
+import { initialPhotoWallActionState } from "@/lib/types/photo-wall";
 import { photoWallSectionContent } from "@/data/sections";
 import { initialPhotoWallActionState } from "@/types/form-actions";
 

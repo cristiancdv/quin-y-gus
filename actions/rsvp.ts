@@ -2,7 +2,7 @@
 
 import { rsvpSchema } from "@/lib/validations/rsvp-schema";
 import { appendRsvpRow } from "@/lib/google-sheets/rsvp-adapter";
-import type { RsvpActionState } from "@/types/form-actions";
+import { RsvpActionState } from "@/lib/types/rsvp";
 
 /**
  * Server Action backing the RSVP form. Treated as a public attack surface:

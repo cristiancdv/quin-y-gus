@@ -1,9 +1,8 @@
 "use server";
 
 import { photoWallSchema } from "@/lib/validations/photo-wall-schema";
-import { appendPhotoWallRow } from "@/lib/google-sheets/photo-wall-adapter";
 import { uploadPhotoToGooglePhotos } from "@/lib/google-photos/client";
-import type { PhotoWallActionState } from "@/types/form-actions";
+import { PhotoWallActionState } from "@/lib/types/photo-wall";
 
 /**
  * Server Action backing the guest photo-upload form. Re-validates the file
@@ -17,34 +16,27 @@ export async function submitPhotoWallEntry(
   const raw = {
     photo: formData.get("photo"),
   };
+  try {
+    const result = photoWallSchema.safeParse(raw);
 
-  const result = photoWallSchema.safeParse(raw);
+    if (!result.success) {
+      return {
+        status: "error",
+        message: "Revisá los datos del formulario.",
+        fieldErrors: result.error.flatten().fieldErrors,
+      };
+    }
 
-  if (!result.success) {
-    return {
-      status: "error",
-      message: "Revisá los datos del formulario.",
-      fieldErrors: result.error.flatten().fieldErrors,
-    };
+    const uploadOutcome = await uploadPhotoToGooglePhotos(result.data.photo);
+
+    if (!uploadOutcome.ok) {
+      return { status: "error", message: uploadOutcome.error };
+    }
+
+
+    return { status: "success" };
+  } catch (error) {
+    console.error("Error en submitPhotoWallEntry:", error);
+    return { status: "error", message: "Ocurrió un error inesperado. Por favor, intentá nuevamente." };
   }
-
-  const uploadOutcome = await uploadPhotoToGooglePhotos(result.data.photo);
-
-  if (!uploadOutcome.ok) {
-    return { status: "error", message: uploadOutcome.error };
-  }
-
-  // The Google Photos upload is the guest-facing operation. Keep the Sheets
-  // row as best-effort operational metadata so a missing optional tab does
-  // not incorrectly tell the guest their photo was lost.
-  const sheetOutcome = await appendPhotoWallRow({
-    fileName: result.data.photo.name,
-    googlePhotosUrl: uploadOutcome.productUrl,
-  });
-
-  if (!sheetOutcome.ok) {
-    console.error("[google-sheets] No se pudo registrar la foto en Sheets.");
-  }
-
-  return { status: "success" };
 }

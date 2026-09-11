@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { submitRsvp } from "@/actions/rsvp";
+import { initialRsvpActionState } from "@/lib/types/rsvp";
 import type { RsvpDecision } from "./swipe-card";
 import { rsvpSectionContent } from "@/data/sections";
 import { initialRsvpActionState } from "@/types/form-actions";

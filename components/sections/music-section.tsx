@@ -10,7 +10,7 @@ const musicIcons = { mirrorball: MirrorballIcon } as const;
 export function MusicSection() {
     const spotifyEmbedUrl = getSpotifyEmbedUrl(spotifyPlaylistUrl);
     const MusicIcon = musicIcons[musicSectionContent.icon];
-
+    console.log(spotifyEmbedUrl);
     return (
         <section aria-label={musicSectionContent.ariaLabel} className="bg-background px-6 py-20">
             <div className="mx-auto max-w-lg text-center">
@@ -38,13 +38,15 @@ export function MusicSection() {
 
                         <div className="mt-4 overflow-hidden rounded-2xl bg-[#121212] shadow-xl shadow-black/10">
                             <iframe
-                                title={musicSectionContent.playlistTitle}
+                                data-testid="embed-iframe"
+                                style={{ borderRadius: "12px" }}
                                 src={spotifyEmbedUrl}
                                 width="100%"
                                 height="352"
+                                frameBorder="0"
+                                allowFullScreen
                                 allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
                                 loading="lazy"
-                                className="block"
                             />
                         </div>
                     </div>

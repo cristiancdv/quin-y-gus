@@ -32,7 +32,7 @@ export function SiteFooter() {
         width={1444}
         height={984}
         sizes="(max-width: 640px) 100vw, 32rem"
-        className="mx-auto my-6 h-auto w-1/3 max-w-lg rounded-2xl object-cover"
+        className="mx-auto my-6 h-auto w-1/2 sm:w-1/3 max-w-lg rounded-2xl object-cover"
       />
 
       <p className="text-secondary mt-2 text-xs font-semibold tracking-[0.2em] uppercase">
