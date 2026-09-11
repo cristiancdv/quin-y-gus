@@ -11,7 +11,6 @@ import { submitRsvp } from "@/actions/rsvp";
 import { initialRsvpActionState } from "@/lib/types/rsvp";
 import type { RsvpDecision } from "./swipe-card";
 import { rsvpSectionContent } from "@/data/sections";
-import { initialRsvpActionState } from "@/types/form-actions";
 
 const rsvpIcons = { heart: Heart, "party-popper": PartyPopper } as const;
 
