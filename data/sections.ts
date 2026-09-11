@@ -10,7 +10,7 @@ export const countdownSectionContent = {
     eyebrow: "Cuenta regresiva",
     titleLine1: "La cuenta regresiva",
     titleLine2: "para el match",
-    description: 'El algoritmo está calculando el tiempo exacto hasta que digamos "sí". Faltan:',
+    description: 'El algoritmo está calculando el tiempo exacto hasta que digamos "SI". Faltan:',
     units: {
         days: "Días",
         hours: "Horas",
@@ -28,8 +28,8 @@ export const storySectionContent = {
 } as const;
 
 export const gallerySectionContent = {
-    ariaLabel: "Galería",
-    eyebrow: "Galería",
+    ariaLabel: "Momentos",
+    eyebrow: "Momentos",
     titleLine1: "Desliza nuestros",
     titleLine2: "mejores momentos",
     instruction: "← Desliza horizontalmente →",
@@ -46,8 +46,8 @@ export const accessibilityContent = {
 
 export const photoWallSectionContent = {
     ariaLabel: "Muro de fotos",
-    eyebrow: "Tu foto con los novios",
-    description: "Sube la foto que te tomaste con {first} & {second} y forma parte de nuestro muro de recuerdos.",
+    eyebrow: "Fotos",
+    description: "Por favor, no subas las fotos del casamiento a tus redes, mejor compártelas con nosotros y sé parte de nuestro álbum del recuerdo. Nuestra vida personal no la publicamos, la vivimos.",
     icon: "camera",
     upload: "Subir fotos",
     uploading: "Subiendo...",
@@ -87,11 +87,11 @@ export const rsvpSectionContent = {
     titleLine2: "confirmar",
     cardAriaLabel: "Tarjeta de confirmación de asistencia",
     cardTitle: "¿Confirmas tu asistencia?",
-    cardInstruction: "Desliza el corazón hacia la derecha",
+    cardInstruction: "Desliza la tarjeta hacia la derecha o presiona el corazón si confirmas tu asistencia. En caso contrario, desliza la tarjeta hacia la izquierda o presiona la X.",
     noLabel: "No podré asistir",
     yesLabel: "Sí, voy a asistir",
-    attendingPrompt: "¡Es un match! Contanos más",
-    decliningPrompt: "Antes de irte, contanos quién sos",
+    attendingPrompt: "¡Es un match! Por favor, llena tus datos para confirmar tu asistencia.",
+    decliningPrompt: "Lamentamos que no puedas acompañarnos, pero lo entendemos. Por favor, llena tus datos.",
     fullName: "Nombre completo",
     guestCount: "Cantidad de personas (incluite vos)",
     dietaryNotes: "Restricciones alimenticias (opcional)",
@@ -125,17 +125,17 @@ export const musicSectionContent = {
 
 export const footerContent = {
     image: "/images/Brindis2.png",
-    imageAlt: "Brindis de Valentina y Sebastián",
+    imageAlt: "Brindis de Gustavo y Quintin",
     description: "El match que cambió todo. ¡Nos vemos ahí!",
     closing: "El match que cambió todo. Gracias por ser parte de nuestra historia.",
     saveDate: "Guardar fecha en Google Calendar",
     calendarIcon: "calendar-plus",
     heartIcon: "heart",
-    seeYou: "¡TE ESPERAMOS!",
+    seeYou: "¡Te Esperamos!",
 } as const;
 
 export const musicToggleContent = {
-    audioSrc: "/audio/love_me_like_you_do.mp3",
+    audioSrc: "/audio/yo_contigo_tu_conmigo.mp3",
     playLabel: "Reproducir música de fondo",
     pauseLabel: "Pausar música de fondo",
     playIcon: "volume-2",

@@ -4,6 +4,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { Toaster } from "@/components/ui/sonner";
 import { weddingContent } from "@/data/wedding";
 import { accessibilityContent } from "@/data/sections";
+import { GyQIcon } from "@/components/icons/wedding-icons";
 import "../globals.css";
 
 // Body copy: clean grotesque sans, matches the reference's UI text.
@@ -30,7 +31,7 @@ const alexBrush = Alex_Brush({
 });
 
 const { first, second } = weddingContent.coupleNames;
-const { notFoundCards } = weddingContent;
+const { notFoundCards } = weddingContent ;
 
 export const metadata: Metadata = {
   title: `${first} & ${second} — ${weddingContent.weddingDateLabel}`,
@@ -43,7 +44,11 @@ export const viewport: Viewport = {
   themeColor: "#fdf8f5",
 };
 
+const notFoundIcons = { brindis2: GyQIcon } as const;
+
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
+  const GYQIcon = notFoundIcons[notFoundCards.icon as "brindis2"];
   return (
     <html
       lang="es"
@@ -56,7 +61,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </div>
         <main className="desktop-message" aria-label={accessibilityContent.desktopAvailability}>
           <article className="desktop-message-card">
-            <i className={notFoundCards.icon} />
+            <GYQIcon />
             <h1>{notFoundCards.title}</h1>
             <p>{notFoundCards.paragraph}<span className="font-bold">{notFoundCards.paragraphSpan}</span></p>
             {notFoundCards.qrUrl ? (
