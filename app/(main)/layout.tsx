@@ -4,7 +4,7 @@ import { QRCodeSVG } from "qrcode.react";
 import { Toaster } from "@/components/ui/sonner";
 import { weddingContent } from "@/data/wedding";
 import { accessibilityContent } from "@/data/sections";
-import "./globals.css";
+import "../globals.css";
 
 // Body copy: clean grotesque sans, matches the reference's UI text.
 const inter = Inter({
