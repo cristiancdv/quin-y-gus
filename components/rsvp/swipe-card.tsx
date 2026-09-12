@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-// Importamos useState para la nueva funcionalidad
 import type { PointerEvent as ReactPointerEvent } from "react";
 import { Heart, PartyPopper, X } from "lucide-react";
 import { rsvpSectionContent } from "@/data/sections";
@@ -12,18 +11,13 @@ export type RsvpDecision = "yes" | "no";
 
 const SWIPE_THRESHOLD_PX = 110;
 
-// Nueva constante para el umbral de inclinación
-const SLOPE_THRESHOLD = 0.5; // Permite una inclinación de hasta ~26 grados
-
 interface SwipeCardProps {
   onDecide: (decision: RsvpDecision) => void;
 }
 
 export function SwipeCard({ onDecide }: SwipeCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const drag = useRef({ startX: 0, startY: 0, dragging: false, isScrolling: false });
-  // drag.current ahora también rastrea startY y isScrolling
-
+  const drag = useRef({ startX: 0, startY: 0, dragging: false });
   const [isExiting, setIsExiting] = useState<RsvpDecision | null>(null);
   const HeartIcon = rsvpIcons[rsvpSectionContent.icons.heart];
   const NoIcon = rsvpIcons[rsvpSectionContent.icons.no];
@@ -32,10 +26,9 @@ export function SwipeCard({ onDecide }: SwipeCardProps) {
     const card = cardRef.current;
     if (!card) return;
     card.style.transition = animated ? "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)" : "";
-    // Si isExiting está activo, no aplicamos rotación
     const rotation = animated || isExiting ? 0 : dx / 18;
     card.style.transform = `translateX(${dx}px) rotate(${rotation}deg)`;
-  }, [isExiting]); // Añadimos isExiting como dependencia
+  }, [isExiting]);
 
   const finish = useCallback(
     (decision: RsvpDecision) => {
@@ -56,12 +49,10 @@ export function SwipeCard({ onDecide }: SwipeCardProps) {
   function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
     if (isExiting) return;
     cardRef.current?.setPointerCapture(event.pointerId);
-    // Guardamos startY y reseteamos isScrolling
     drag.current = {
       startX: event.clientX,
       startY: event.clientY,
-      dragging: true,
-      isScrolling: false
+      dragging: true
     };
     setTransform(0, false);
   }
@@ -70,29 +61,9 @@ export function SwipeCard({ onDecide }: SwipeCardProps) {
     if (!drag.current.dragging || isExiting) return;
 
     const dx = event.clientX - drag.current.startX;
-    const dy = event.clientY - drag.current.startY;
 
-    // --- NUEVA LÓGICA ANTI-SCROLL ---
-
-    // Si ya hemos determinado que es scroll, no hacemos nada más en esta función
-    if (drag.current.isScrolling) return;
-
-    // Si aún no hemos decidido si es scroll o swipe...
-    // Calculamos el desplazamiento absoluto
-    const absDx = Math.abs(dx);
-    const absDy = Math.abs(dy);
-
-    // Si el movimiento vertical es significativamente mayor al horizontal,
-    // marcamos el gesto como "scroll"
-    if (absDy > absDx * SLOPE_THRESHOLD) {
-      drag.current.isScrolling = true;
-      // Detenemos cualquier arrastre horizontal que haya empezado
-      setTransform(0, true);
-      return; // Permitimos que el evento de puntero se propague al navegador para hacer scroll
-    }
-    // --- FIN DE LA NUEVA LÓGICA ---
-
-    // Si pasa la prueba, aplicamos la transformación horizontal
+    // Aplicamos el movimiento directamente reflejando la posición actual del dedo.
+    // Al usar touch-none en el div, el navegador ya no interfiere con el eje horizontal.
     setTransform(dx, false);
   }
 
@@ -100,13 +71,10 @@ export function SwipeCard({ onDecide }: SwipeCardProps) {
     if (!drag.current.dragging || isExiting) return;
     drag.current.dragging = false;
 
-    // Si el gesto fue detectado como scroll, no disparamos el swipe
-    if (drag.current.isScrolling) {
-      return;
-    }
-
     const dx = event.clientX - drag.current.startX;
 
+    // Si supera el umbral hacia la derecha o izquierda, toma la decisión.
+    // Si se queda corto (incluso si fue y vino), vuelve suavemente al centro.
     if (Math.abs(dx) > SWIPE_THRESHOLD_PX) {
       finish(dx > 0 ? "yes" : "no");
     } else {
@@ -124,8 +92,8 @@ export function SwipeCard({ onDecide }: SwipeCardProps) {
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
-        // Mantenemos touch-pan-y para ayudar al navegador
-        className="bg-card border-border relative touch-pan-y cursor-grab rounded-3xl border p-10 text-center shadow-xl shadow-black/10 select-none active:cursor-grabbing"
+        // Cambiamos touch-pan-y por touch-none para evitar bloqueos del navegador al cambiar de dirección
+        className="bg-card border-border relative touch-none cursor-grab rounded-3xl border p-10 text-center shadow-xl shadow-black/10 select-none active:cursor-grabbing"
       >
         <span className="bg-accent text-primary mx-auto flex size-20 items-center justify-center rounded-full">
           <HeartIcon className="size-9" aria-hidden fill="currentColor" />
