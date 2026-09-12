@@ -7,7 +7,7 @@ export const heroSectionContent = {
 
 export const countdownSectionContent = {
     ariaLabel: "Cuenta regresiva",
-    eyebrow: "Cuenta regresiva",
+    eyebrow: "Próxima Cita",
     titleLine1: "La cuenta regresiva",
     titleLine2: "para el match",
     description: 'El algoritmo está calculando el tiempo exacto hasta que digamos "SI". Faltan:',
@@ -58,8 +58,8 @@ export const photoWallSectionContent = {
 export const eventDetailsSectionContent = {
     ariaLabel: "Detalles del evento",
     eyebrow: "Detalles del evento",
-    titleLine1: "Información del",
-    titleLine2: "encuentro",
+    titleLine1: "Información de la",
+    titleLine2: "cita",
     celebrationLabel: "Celebración",
     dressCodeLabel: "Dress code",
     giftsLabel: "Regalos",
