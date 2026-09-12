@@ -45,7 +45,7 @@ export const weddingContent: WeddingContent = {
   dressCode: {
     title: "Elegante Sport",
     description: "Lucí tu mejor look.",
-    paletteNote: "Paleta sugerida: lo que gustes. ¡Sin blanco preferiblemente!",
+    paletteNote: "Paleta sugerida: ¡Lo que gustes!.",
   },
   giftRegistry: {
     intro:
@@ -78,7 +78,7 @@ export const weddingContent: WeddingContent = {
       icon: "userGroup",
       title: "Match argentino",
       description:
-        "En Rosh Ashana, la familia argentina compartió niños envueltos por primera vez con el novio venezolano.",
+        "En Rosh Hashaná, la familia argentina compartió niños envueltos por primera vez con el novio venezolano.",
     },
     {
       id: "match-oficial",
@@ -100,7 +100,7 @@ export const weddingContent: WeddingContent = {
   gallery: [
     {
       id: "foto-1",
-      src: "/images/gallery-1.jpg",
+      src: "/images/gallery-1.jpeg",
       alt: "Gustavo y Quintin en su viaje a Chile",
       caption: "",
     },
@@ -130,7 +130,7 @@ export const weddingContent: WeddingContent = {
     },
     {
       id: "foto-6",
-      src: "/images/gallery-6.jpeg",
+      src: "/images/gallery-6.jpg",
       alt: "Gustavo, Quintin y Nasio en Miramar",
       caption: "",
     },
