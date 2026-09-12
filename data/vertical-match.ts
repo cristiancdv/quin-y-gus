@@ -12,5 +12,5 @@ export const leftProfileImages: VerticalCarouselItem[] = [
 export const rightProfileImages: VerticalCarouselItem[] = [
     { id: "right-1", src: "/images/profiles/img-carrousel-profile-rigth-1.png", alt: "Perfil del novio" },
     { id: "right-2", src: "/images/profiles/img-carrousel-profile-rigth-2.png", alt: "Perfil del novio" },
-    { id: "right-3", src: "/images/profiles/img-carrousel-profile-rigth-3.webp", alt: "Perfil del novio" },
+    { id: "right-3", src: "/images/profiles/img-carrousel-profile-rigth-3.png", alt: "Perfil del novio" },
 ];
