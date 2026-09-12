@@ -10,21 +10,20 @@ const rsvpIcons = { heart: Heart, x: X, "party-popper": PartyPopper } as const;
 export type RsvpDecision = "yes" | "no";
 
 const SWIPE_THRESHOLD_PX = 110;
+const DIRECTION_LOCK_THRESHOLD = 8; // Píxeles mínimos para decidir si es scroll o swipe
 
 interface SwipeCardProps {
   onDecide: (decision: RsvpDecision) => void;
 }
 
-/**
- * Client Component: a draggable, Tinder-style confirmation card. Pointer
- * events move the card via direct ref mutation (not React state) so
- * dragging stays smooth at 60fps; state is only used for the "exiting"
- * phase. The two buttons below are a full keyboard/click equivalent of the
- * drag gesture, so nothing here depends on being able to drag.
- */
 export function SwipeCard({ onDecide }: SwipeCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const drag = useRef({ startX: 0, dragging: false });
+  const drag = useRef({
+    startX: 0,
+    startY: 0,
+    dragging: false,
+    axis: null as "horizontal" | "vertical" | null
+  });
   const [isExiting, setIsExiting] = useState<RsvpDecision | null>(null);
   const HeartIcon = rsvpIcons[rsvpSectionContent.icons.heart];
   const NoIcon = rsvpIcons[rsvpSectionContent.icons.no];
@@ -33,8 +32,9 @@ export function SwipeCard({ onDecide }: SwipeCardProps) {
     const card = cardRef.current;
     if (!card) return;
     card.style.transition = animated ? "transform 0.35s cubic-bezier(0.22, 1, 0.36, 1)" : "";
-    card.style.transform = `translateX(${dx}px) rotate(${dx / 18}deg)`;
-  }, []);
+    const rotation = animated || isExiting ? 0 : dx / 18;
+    card.style.transform = `translateX(${dx}px) rotate(${rotation}deg)`;
+  }, [isExiting]);
 
   const finish = useCallback(
     (decision: RsvpDecision) => {
@@ -54,20 +54,57 @@ export function SwipeCard({ onDecide }: SwipeCardProps) {
 
   function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
     if (isExiting) return;
-    cardRef.current?.setPointerCapture(event.pointerId);
-    drag.current = { startX: event.clientX, dragging: true };
-    setTransform(0, false);
+    // IMPORTANTE: No llamamos a setPointerCapture aquí para permitir que el navegador detecte el scroll vertical si es necesario.
+    drag.current = {
+      startX: event.clientX,
+      startY: event.clientY,
+      dragging: true,
+      axis: null
+    };
   }
 
   function handlePointerMove(event: ReactPointerEvent<HTMLDivElement>) {
     if (!drag.current.dragging || isExiting) return;
-    setTransform(event.clientX - drag.current.startX, false);
+
+    const dx = event.clientX - drag.current.startX;
+    const dy = event.clientY - drag.current.startY;
+
+    // Si aún no hemos definido si el usuario quiere hacer scroll o swipe horizontal:
+    if (drag.current.axis === null) {
+      const absDx = Math.abs(dx);
+      const absDy = Math.abs(dy);
+
+      if (absDx > DIRECTION_LOCK_THRESHOLD || absDy > DIRECTION_LOCK_THRESHOLD) {
+        if (absDy > absDx) {
+          // Es un movimiento vertical -> Marcamos como scroll y dejamos que el navegador actúe
+          drag.current.axis = "vertical";
+          return;
+        } else {
+          // Es un movimiento horizontal -> Bloqueamos el eje, capturamos el puntero y activamos el swipe
+          drag.current.axis = "horizontal";
+          cardRef.current?.setPointerCapture(event.pointerId);
+        }
+      } else {
+        return; // Aún no supera el umbral de decisión
+      }
+    }
+
+    // Si se determinó que es scroll vertical, ignoramos cualquier lógica de la tarjeta
+    if (drag.current.axis === "vertical") return;
+
+    // Si es horizontal, movemos la tarjeta libremente según el desplazamiento actual
+    setTransform(dx, false);
   }
 
   function handlePointerUp(event: ReactPointerEvent<HTMLDivElement>) {
     if (!drag.current.dragging || isExiting) return;
     drag.current.dragging = false;
+
+    // Si fue scroll vertical, no hacemos nada con la tarjeta
+    if (drag.current.axis === "vertical") return;
+
     const dx = event.clientX - drag.current.startX;
+
     if (Math.abs(dx) > SWIPE_THRESHOLD_PX) {
       finish(dx > 0 ? "yes" : "no");
     } else {
@@ -85,6 +122,7 @@ export function SwipeCard({ onDecide }: SwipeCardProps) {
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
+        // touch-pan-y le indica al navegador que permita el desplazamiento vertical nativo
         className="bg-card border-border relative touch-pan-y cursor-grab rounded-3xl border p-10 text-center shadow-xl shadow-black/10 select-none active:cursor-grabbing"
       >
         <span className="bg-accent text-primary mx-auto flex size-20 items-center justify-center rounded-full">
