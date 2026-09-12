@@ -10,6 +10,7 @@ const rsvpIcons = { heart: Heart, x: X, "party-popper": PartyPopper } as const;
 export type RsvpDecision = "yes" | "no";
 
 const SWIPE_THRESHOLD_PX = 110;
+const DIRECTION_LOCK_THRESHOLD = 8; // Píxeles mínimos para decidir si es scroll o swipe
 
 interface SwipeCardProps {
   onDecide: (decision: RsvpDecision) => void;
@@ -17,7 +18,12 @@ interface SwipeCardProps {
 
 export function SwipeCard({ onDecide }: SwipeCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const drag = useRef({ startX: 0, startY: 0, dragging: false });
+  const drag = useRef({
+    startX: 0,
+    startY: 0,
+    dragging: false,
+    axis: null as "horizontal" | "vertical" | null
+  });
   const [isExiting, setIsExiting] = useState<RsvpDecision | null>(null);
   const HeartIcon = rsvpIcons[rsvpSectionContent.icons.heart];
   const NoIcon = rsvpIcons[rsvpSectionContent.icons.no];
@@ -48,22 +54,45 @@ export function SwipeCard({ onDecide }: SwipeCardProps) {
 
   function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
     if (isExiting) return;
-    cardRef.current?.setPointerCapture(event.pointerId);
+    // IMPORTANTE: No llamamos a setPointerCapture aquí para permitir que el navegador detecte el scroll vertical si es necesario.
     drag.current = {
       startX: event.clientX,
       startY: event.clientY,
-      dragging: true
+      dragging: true,
+      axis: null
     };
-    setTransform(0, false);
   }
 
   function handlePointerMove(event: ReactPointerEvent<HTMLDivElement>) {
     if (!drag.current.dragging || isExiting) return;
 
     const dx = event.clientX - drag.current.startX;
+    const dy = event.clientY - drag.current.startY;
 
-    // Aplicamos el movimiento directamente reflejando la posición actual del dedo.
-    // Al usar touch-none en el div, el navegador ya no interfiere con el eje horizontal.
+    // Si aún no hemos definido si el usuario quiere hacer scroll o swipe horizontal:
+    if (drag.current.axis === null) {
+      const absDx = Math.abs(dx);
+      const absDy = Math.abs(dy);
+
+      if (absDx > DIRECTION_LOCK_THRESHOLD || absDy > DIRECTION_LOCK_THRESHOLD) {
+        if (absDy > absDx) {
+          // Es un movimiento vertical -> Marcamos como scroll y dejamos que el navegador actúe
+          drag.current.axis = "vertical";
+          return;
+        } else {
+          // Es un movimiento horizontal -> Bloqueamos el eje, capturamos el puntero y activamos el swipe
+          drag.current.axis = "horizontal";
+          cardRef.current?.setPointerCapture(event.pointerId);
+        }
+      } else {
+        return; // Aún no supera el umbral de decisión
+      }
+    }
+
+    // Si se determinó que es scroll vertical, ignoramos cualquier lógica de la tarjeta
+    if (drag.current.axis === "vertical") return;
+
+    // Si es horizontal, movemos la tarjeta libremente según el desplazamiento actual
     setTransform(dx, false);
   }
 
@@ -71,10 +100,11 @@ export function SwipeCard({ onDecide }: SwipeCardProps) {
     if (!drag.current.dragging || isExiting) return;
     drag.current.dragging = false;
 
+    // Si fue scroll vertical, no hacemos nada con la tarjeta
+    if (drag.current.axis === "vertical") return;
+
     const dx = event.clientX - drag.current.startX;
 
-    // Si supera el umbral hacia la derecha o izquierda, toma la decisión.
-    // Si se queda corto (incluso si fue y vino), vuelve suavemente al centro.
     if (Math.abs(dx) > SWIPE_THRESHOLD_PX) {
       finish(dx > 0 ? "yes" : "no");
     } else {
@@ -92,8 +122,8 @@ export function SwipeCard({ onDecide }: SwipeCardProps) {
         onPointerMove={handlePointerMove}
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
-        // Cambiamos touch-pan-y por touch-none para evitar bloqueos del navegador al cambiar de dirección
-        className="bg-card border-border relative touch-none cursor-grab rounded-3xl border p-10 text-center shadow-xl shadow-black/10 select-none active:cursor-grabbing"
+        // touch-pan-y le indica al navegador que permita el desplazamiento vertical nativo
+        className="bg-card border-border relative touch-pan-y cursor-grab rounded-3xl border p-10 text-center shadow-xl shadow-black/10 select-none active:cursor-grabbing"
       >
         <span className="bg-accent text-primary mx-auto flex size-20 items-center justify-center rounded-full">
           <HeartIcon className="size-9" aria-hidden fill="currentColor" />
